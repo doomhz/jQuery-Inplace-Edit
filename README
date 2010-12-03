@@ -1,0 +1,73 @@
+jQuery Inplace Edit Demo
+
+
+How To
+
+   1. Include the doomEdit.css style (optional)
+   2. Include the jquery.doomEdit.min.js file
+   3. Activate the plug-in: $('.dedit').doomEdit();
+
+
+Options
+
+editForm.method: "post"
+    GET or POST request method for remotely sent data. 
+editForm.action: "/"
+    The remote URL where the data will be sent. 
+editForm.id: "doomEditForm"
+    The id of the form. 
+ajaxSubmit: true
+    Specifyes if the data should be sent remotely. 
+editField: "<input name="doomEditElement" type="text" />"
+    The hidden edit field that will appear when edit starts. You can specify your own textarea or input field. 
+submitBtn: "<button type="submit" class="save-btn">Save</button>"
+    The submit button element that will be clicked to save the data. 
+cancelBtn: "<button type="button" class="cancel-btn">Cancel</button>"
+    The cancel button element that will be clicked to cancel the data. 
+beforeFormSubmit: function (data, form, el) {$('button', form).attr('disabled', 'disabled').fadeTo(0, 0.2);}
+    A callback function that will be triggered before the data is saved. 
+afterFormSubmit: function (data, form, el) {$('button', form).removeAttr('disabled').fadeTo(0, 1);}
+    A callback function that will be triggered after the data is saved. 
+onCancel: null
+    A callback function that will be triggered when the cancel button is pressed. 
+onStartEdit: null
+    A callback function that will be triggered when the edit field is activated. 
+
+
+Implementation
+
+Very simple example
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('.dedit-simple').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}});
+	});
+</script>
+		
+
+Simple example with textarea
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('.dedit-simple').doomEdit({ajaxSubmit:false, editField: '<textarea name="myEditTextarea" rows="10" cols="70"></textarea>', afterFormSubmit: function (data, form, el) {el.text(data);}});
+	});
+</script>
+		
+
+Remote submit with ajax example
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('.dedit-remote').doomEdit({editForm:{method:'post', action:'remote.html', id:'myeditformid'}, afterFormSubmit: function (data, form, el) {el.text($('input', form).val());alert(data);}});
+	});
+</script>
+		
+
+Remote submit with ajax example and JSON response
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('.dedit-remote-json').doomEdit({editForm:{method:'post', action:'remote_json.html', id:'myeditformid'}, afterFormSubmit: function (data, form, el) {data = $.parseJSON(data);el.text(data.message);alert(data.message);}});
+	});
+</script>
+		

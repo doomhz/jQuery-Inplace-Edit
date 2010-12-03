@@ -1,0 +1,13 @@
+.dedit-simple, .dedit-textarea, .dedit-remote, .dedit-remote-json {
+	cursor:pointer;
+	background:#EFE32D;
+}
+
+.dedit-simple:hover, .dedit-textarea:hover, .dedit-remote:hover, .dedit-remote-json:hover {
+	background:#EFE32D url(edit.png) no-repeat center right;
+	padding-right:20px;
+}
+
+form {
+	display:inline;
+}
