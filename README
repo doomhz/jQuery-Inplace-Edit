@@ -71,3 +71,11 @@ Remote submit with ajax example and JSON response
 	});
 </script>
 		
+Multiple cells table edit example
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		//Edit multiple cells inline
+		$('.edit-cell-inline').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}});
+	});
+</script>
