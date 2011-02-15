@@ -3,7 +3,7 @@
 *
 * @author Dumitru Glavan
 * @link http://dumitruglavan.com
-* @version 1.0
+* @version 1.1
 * @requires jQuery v1.3.2 or later
 *
 * @example $('.dedit-simple').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}}); - Simple inline edit
@@ -43,61 +43,65 @@
 					 };
 		$.extend(this.config, options);
 
-		var $self = $(this);
-		var self = this;
+		var origObject = this;
 
-		$self.click(function () {
+		$(this).each(function (index, el) {
+			$(el).unbind('click');
+			$(el).click(function () {
+				var $self = $(this);
+				var self = this;
 
-			self.initialValue = $self.text();
-			var editForm = $('<form></form>').attr(self.config.editForm);
-			var editElement = $(self.config.editField).val(self.initialValue).text(self.initialValue).addClass('text');
+				self.initialValue = $self.text();
+				var editForm = $('<form></form>').attr(origObject.config.editForm);
+				var editElement = $(origObject.config.editField).val(self.initialValue).text(self.initialValue).addClass('text');
 
-			editForm.append(editElement);
-			var submitButton = $(self.config.submitBtn).attr({disabled:'disabled'}).addClass('button');
-			var cancelButton = $(self.config.cancelBtn).addClass('button inactive');
-			cancelButton.click(function () {
-				editForm.remove();
-				$self.show();
-				$.isFunction(self.config.onCancel) && self.config.onCancel(editForm, $self);
-			});
-			editElement.keyup(function () {
-				var value = editElement.val() || editElement.text();
-				if (value === '' || value === self.initialVal) {
-					submitButton.attr('disabled', 'disabled');
-				} else {
-					submitButton.attr('disabled', '');
-				}
-			});
-			editForm.append(submitButton);
-			editForm.append(cancelButton);
-			editForm.submit(function () {
-				if (self.config.ajaxSubmit) {
-					$.ajax({
-						url: editForm.attr('action'),
-						type: editForm.attr('method'),
-						data: editForm.serialize(),
-						beforeSend: function(data){
-							$.isFunction(self.config.beforeFormSubmit) && self.config.beforeFormSubmit(data, editForm, $self);
-						},
-						success: function(data){
-							$.isFunction(self.config.afterFormSubmit) && self.config.afterFormSubmit(data, editForm, $self);
-							editForm.remove();
-							$(self).show();
-						}
-					});
-				} else {
-					var newVal = editElement.val() || editElement.text();
-					$.isFunction(self.config.afterFormSubmit) && self.config.afterFormSubmit(newVal, editForm, $self);
+				editForm.append(editElement);
+				var submitButton = $(origObject.config.submitBtn).attr({disabled:'disabled'}).addClass('button');
+				var cancelButton = $(origObject.config.cancelBtn).addClass('button inactive');
+				cancelButton.click(function () {
 					editForm.remove();
-					$(self).show();
-				}
-				return false;
+					$self.show();
+					$.isFunction(origObject.config.onCancel) && origObject.config.onCancel(editForm, $self);
+				});
+				editElement.keyup(function () {
+					var value = editElement.val() || editElement.text();
+					if (value === '' || value === self.initialVal) {
+						submitButton.attr('disabled', 'disabled');
+					} else {
+						submitButton.attr('disabled', '');
+					}
+				});
+				editForm.append(submitButton);
+				editForm.append(cancelButton);
+				editForm.submit(function () {
+					if (origObject.config.ajaxSubmit) {
+						$.ajax({
+							url: editForm.attr('action'),
+							type: editForm.attr('method'),
+							data: editForm.serialize(),
+							beforeSend: function(data){
+								$.isFunction(origObject.config.beforeFormSubmit) && origObject.config.beforeFormSubmit(data, editForm, $self);
+							},
+							success: function(data){
+								$.isFunction(origObject.config.afterFormSubmit) && origObject.config.afterFormSubmit(data, editForm, $self);
+								editForm.remove();
+								$(self).show();
+							}
+						});
+					} else {
+						var newVal = editElement.val() || editElement.text();
+						$.isFunction(origObject.config.afterFormSubmit) && origObject.config.afterFormSubmit(newVal, editForm, $self);
+						editForm.remove();
+						$(self).show();
+					}
+					return false;
+				});
+
+				$self.hide().after(editForm);
+				editElement.focus();
+
+				$.isFunction(origObject.config.onStartEdit) && origObject.config.onStartEdit(editForm, $self);
 			});
-
-			$self.hide().after(editForm);
-			editElement.focus();
-
-			$.isFunction(self.config.onStartEdit) && self.config.onStartEdit(editForm, $self);
 		});
 
 		return this;

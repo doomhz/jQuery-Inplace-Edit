@@ -126,6 +126,44 @@
 		
 		<p>Please <span class="dedit-remote-json">click me</span> to edit and save the content remotely! A JSON response will be parsed.</p>
 
+		<h3>Multiple cells table edit example</h3>
+
+		<pre>
+&lt;script type=&quot;text/javascript&quot;&gt;
+	$(document).ready(function () {
+		//Edit multiple cells inline
+		$('.edit-cell-inline').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}});
+	});
+&lt;/script&gt;
+		</pre>
+
+		<h4>Result:</h4>
+
+		<table>
+			<tr>
+				<th>Col 1</th>
+				<th>Col 2</th>
+			</tr>
+			<tr>
+				<td><span class="edit-cell-inline">1111</span></td>
+				<td><span class="edit-cell-inline">2222</span></td>
+			</tr>
+			<tr>
+				<td><span class="edit-cell-inline">3333</span></td>
+				<td><span class="edit-cell-inline">4444</span></td>
+			</tr>
+			<tr>
+				<td><span class="edit-cell-inline">5555</span></td>
+				<td><span class="edit-cell-inline">6666</span></td>
+			</tr>
+			<tr>
+				<td><span class="edit-cell-inline">7777</span></td>
+				<td><span class="edit-cell-inline">8888</span></td>
+			</tr>
+		</table>
+		
+		
+
 		<script type="text/javascript">
 			$(document).ready(function () {
 				/**
@@ -139,6 +177,8 @@
 				$('.dedit-remote').doomEdit({editForm:{method:'post', action:'remote.html', id:'myeditformid'}, afterFormSubmit: function (data, form, el) {el.text($('input', form).val());alert(data);}});
 				//Inline edit and remote save with ajax with JSON response
 				$('.dedit-remote-json').doomEdit({editForm:{method:'post', action:'remote_json.html', id:'myeditformid'}, afterFormSubmit: function (data, form, el) {data = $.parseJSON(data);el.text(data.message);alert(data.message);}});
+				//Edit multiple cells inline
+				$('.edit-cell-inline').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}});
 			});
 		</script>
 
