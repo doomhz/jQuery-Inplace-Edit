@@ -32,6 +32,7 @@
 						editField: '<input name="doomEditElement" type="text" />',
 						submitBtn: '<button type="submit" class="save-btn">Save</button>',
 						cancelBtn: '<button type="button" class="cancel-btn">Cancel</button>',
+						extraHtml: '',
 						afterFormSubmit: function (data, form, el) {
 							$('button', form).removeAttr('disabled').fadeTo(0, 1);
 						},
@@ -52,7 +53,7 @@
 				var self = this;
 
 				self.initialValue = $self.text();
-				var editForm = $('<form></form>').attr(origObject.config.editForm);
+				var editForm = $('<form>'+origObject.config.extraHtml+'</form>').attr(origObject.config.editForm);
 				var editElement = $(origObject.config.editField).val(self.initialValue).text(self.initialValue).addClass('text');
 
 				editForm.append(editElement);
