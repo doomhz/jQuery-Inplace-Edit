@@ -53,8 +53,17 @@
 				var self = this;
 
 				self.initialValue = $self.text();
-				var editForm = $('<form>'+origObject.config.extraHtml+'</form>').attr(origObject.config.editForm);
-				var editElement = $(origObject.config.editField).val(self.initialValue).text(self.initialValue).addClass('text');
+				var editForm = $('<form>' + origObject.config.extraHtml + '</form>').attr(origObject.config.editForm);
+				var editElement = $(origObject.config.editField).addClass('text');
+
+				switch (editElement.get(0).tagName) {
+					case 'INPUT':
+						editElement.val(self.initialValue);
+						break;
+					default:
+						editElement.text(self.initialValue);
+						break;
+				}
 
 				editForm.append(editElement);
 				var submitButton = $(origObject.config.submitBtn).attr({disabled:'disabled'}).addClass('button');
