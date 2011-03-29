@@ -49,6 +49,14 @@
 			<dd>
 				The cancel button element that will be clicked to cancel the data.
 			</dd>
+			<dt><b>showOnEvent</b>: "click"</dt>
+			<dd>
+				Show the edit form on this event. If set to false - don't bind it to any event.
+			</dd>
+			<dt><b>autoTrigger</b>: false</dt>
+			<dd>
+				If set to true - shows the edit form immediately. Usually you set the showOnEvent to false and autoTrigger to true to trigger the event immediately without binding it.
+			</dd>
 			<dt><b>beforeFormSubmit</b>: function (data, form, el) {$('button', form).attr('disabled', 'disabled').fadeTo(0, 0.2);}</dt>
 			<dd>
 				A callback function that will be triggered before the data is saved.

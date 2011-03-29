@@ -23,7 +23,11 @@ editField: "<input name="doomEditElement" type="text" />"
 submitBtn: "<button type="submit" class="save-btn">Save</button>"
     The submit button element that will be clicked to save the data. 
 cancelBtn: "<button type="button" class="cancel-btn">Cancel</button>"
-    The cancel button element that will be clicked to cancel the data. 
+    The cancel button element that will be clicked to cancel the data.
+showOnEvent: "click"
+	Show the edit form on this event. If set to false - don't bind it to any event.
+autoTrigger: false
+	If set to true - shows the edit form immediately. Usually you set the showOnEvent to false and autoTrigger to true to trigger the event immediately without binding it.
 beforeFormSubmit: function (data, form, el) {$('button', form).attr('disabled', 'disabled').fadeTo(0, 0.2);}
     A callback function that will be triggered before the data is saved. 
 afterFormSubmit: function (data, form, el) {$('button', form).removeAttr('disabled').fadeTo(0, 1);}
