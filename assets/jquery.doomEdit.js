@@ -3,7 +3,7 @@
 *
 * @author Dumitru Glavan
 * @link http://dumitruglavan.com
-* @version 1.2
+* @version 1.3
 * @requires jQuery v1.3.2 or later
 *
 * @example $('.dedit-simple').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}}); - Simple inline edit
@@ -40,6 +40,7 @@
 			editField: '<input name="doomEditElement" type="text" />',
 			submitBtn: '<button type="submit" class="save-btn">Save</button>',
 			cancelBtn: '<button type="button" class="cancel-btn">Cancel</button>',
+			autoDisableBt: true,
 			extraHtml: '',
 			showOnEvent: 'click',
 			autoTrigger: false,
@@ -51,7 +52,7 @@
 			},
 			onCancel: null,
 			onStartEdit: null
-		 };
+		};
 		$.extend(this.config, options);
 
 		var self = this;
@@ -88,24 +89,27 @@
 		}
 
 		editForm.append(editElement);
-		var submitButton = $(self.config.submitBtn).attr({disabled:'disabled'}).addClass('button');
+		var submitButton = $(self.config.submitBtn).attr({disabled:self.config.autoDisableBt}).addClass('button');
 		var cancelButton = $(self.config.cancelBtn).addClass('button inactive');
 		cancelButton.click(function () {
 			editForm.remove();
 			$self.show();
 			$.isFunction(self.config.onCancel) && self.config.onCancel(editForm, $self);
 		});
-		editElement.keyup(function () {
-			var value = editElement.val() || editElement.text();
-			if (value === '' || value === self.initialVal) {
-				submitButton.attr('disabled', 'disabled');
-			} else {
-				submitButton.attr('disabled', '');
-			}
-		});
+		if (self.config.autoDisableBt) {
+			editElement.keyup(function () {
+				var value = editElement.val() || editElement.text();
+				if (value === '' || value === self.initialVal) {
+					submitButton.attr('disabled', 'disabled');
+				} else {
+					submitButton.attr('disabled', '');
+				}
+			});
+		}
 		editForm.append(submitButton);
 		editForm.append(cancelButton);
 		editForm.submit(function () {
+			var newVal = editElement.val() || editElement.text();
 			if (self.config.ajaxSubmit) {
 				$.ajax({
 					url: editForm.attr('action'),
@@ -115,13 +119,12 @@
 						$.isFunction(self.config.beforeFormSubmit) && self.config.beforeFormSubmit(data, editForm, $self);
 					},
 					success: function(data){
-						$.isFunction(self.config.afterFormSubmit) && self.config.afterFormSubmit(data, editForm, $self);
+						$.isFunction(self.config.afterFormSubmit) && self.config.afterFormSubmit(data, editForm, $self, newVal);
 						editForm.remove();
 						$(self).show();
 					}
 				});
-			} else {
-				var newVal = editElement.val() || editElement.text();
+			} else {				
 				$.isFunction(self.config.afterFormSubmit) && self.config.afterFormSubmit(newVal, editForm, $self);
 				editForm.remove();
 				$(self).show();

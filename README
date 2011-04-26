@@ -24,6 +24,9 @@ submitBtn: "<button type="submit" class="save-btn">Save</button>"
     The submit button element that will be clicked to save the data. 
 cancelBtn: "<button type="button" class="cancel-btn">Cancel</button>"
     The cancel button element that will be clicked to cancel the data.
+autoDisableBt: true
+	The submit button is auto-disabled by default if the content of the edited field is the same as the old one so the user can't submit the form if he didn't change anything.
+	Change this to false so the user can always submit the form.
 showOnEvent: "click"
 	Show the edit form on this event. If set to false - don't bind it to any event.
 autoTrigger: false
