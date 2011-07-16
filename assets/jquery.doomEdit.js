@@ -3,7 +3,7 @@
 *
 * @author Dumitru Glavan
 * @link http://dumitruglavan.com
-* @version 1.3
+* @version 1.4 (16-JUL-2011)
 * @requires jQuery v1.3.2 or later
 *
 * @example $('.dedit-simple').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}}); - Simple inline edit
@@ -48,7 +48,7 @@
 				$('button', form).removeAttr('disabled').fadeTo(0, 1);
 			},
 			beforeFormSubmit: function (data, form, el) {
-				$('button', form).attr('disabled', 'disabled').fadeTo(0, 0.2);
+				$('button', form).attr('disabled', true).fadeTo(0, 0.2);
 			},
 			onCancel: null,
 			onStartEdit: null
@@ -100,9 +100,9 @@
 			editElement.keyup(function () {
 				var value = editElement.val() || editElement.text();
 				if (value === '' || value === self.initialVal) {
-					submitButton.attr('disabled', 'disabled');
+					submitButton.attr('disabled', true);
 				} else {
-					submitButton.attr('disabled', '');
+					submitButton.attr('disabled', false);
 				}
 			});
 		}
