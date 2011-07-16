@@ -2,7 +2,7 @@
 * Doom EditInPlace jQuery Plugin
 *
 * @author Dumitru Glavan
-* @link http://dumitruglavan.com
+* @link http://dumitruglavan.com/jquery-doom-inplace-edit-plugin/
 * @version 1.4 (16-JUL-2011)
 * @requires jQuery v1.3.2 or later
 *
