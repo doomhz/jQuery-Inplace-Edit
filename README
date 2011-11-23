@@ -59,7 +59,14 @@ Simple example with textarea
 		$('.dedit-simple').doomEdit({ajaxSubmit:false, editField: '<textarea name="myEditTextarea" rows="10" cols="70"></textarea>', afterFormSubmit: function (data, form, el) {el.text(data);}});
 	});
 </script>
-		
+
+Simple example with select box
+
+<script type="text/javascript">
+    $(document).ready(function () {
+		$('.dedit-simple').doomEdit({ajaxSubmit:false, editField: '<select name="myEditSelect"><option value="male">male</option><option value="female">female</option></select>', afterFormSubmit: function (data, form, el) {el.text(data);}});
+	});
+</script>
 
 Remote submit with ajax example
 

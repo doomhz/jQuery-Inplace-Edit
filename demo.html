@@ -116,7 +116,7 @@
     	<pre>
 &lt;script type=&quot;text/javascript&quot;&gt;
 	$(document).ready(function () {
-		$('.dedit-simple').doomEdit({ajaxSubmit:false, editField: '&lt;textarea name="myEditTextarea" rows="10" cols="70"&gt;&lt;/textarea&gt;', afterFormSubmit: function (data, form, el) {el.text(data);}});
+		$('.dedit-simple').doomEdit({ajaxSubmit:false, editField: '&lt;select name="myEditSelect"&gt;&lt;option value="male"&gt;male&lt;/option&gt;&lt;option value="female"&gt;female&lt;/option&gt;&lt;/select&gt;', afterFormSubmit: function (data, form, el) {el.text(data);}});
 	});
 &lt;/script&gt;
 		</pre>
