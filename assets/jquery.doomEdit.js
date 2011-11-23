@@ -3,8 +3,8 @@
 *
 * @author Dumitru Glavan
 * @link http://dumitruglavan.com/jquery-doom-inplace-edit-plugin/
-* @version 1.4 (16-JUL-2011)
-* @requires jQuery v1.3.2 or later
+* @version 2.0 (23-NOV-2011)
+* @requires jQuery v1.4 or later
 *
 * @example $('.dedit-simple').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}}); - Simple inline edit
 * @example $('.dedit-textarea').doomEdit({ajaxSubmit:false, editField: '<textarea name="myEditTextarea" rows="10" cols="70"></textarea>', afterFormSubmit: function (data, form, el) {el.text(data);}}); - Inline edit with textarea
@@ -69,7 +69,7 @@
 		}
 
 		return this;
-	},
+	};
 
 	$.fn.showEditForm = function () {
 		var self = this;
@@ -78,15 +78,9 @@
 		self.initialValue = $self.text();
 		var editForm = $('<form>' + self.config.extraHtml + '</form>').attr(self.config.editForm);
 		var editElement = $(self.config.editField).addClass('text');
+        var editElementTagName = editElement.get(0).tagName;
 
-		switch (editElement.get(0).tagName) {
-			case 'INPUT':
-				editElement.val(self.initialValue);
-				break;
-			default:
-				editElement.text(self.initialValue);
-				break;
-		}
+		editElement.val(self.initialValue);
 
 		editForm.append(editElement);
 		var submitButton = $(self.config.submitBtn).attr({disabled:self.config.autoDisableBt}).addClass('button');
@@ -97,9 +91,12 @@
 			$.isFunction(self.config.onCancel) && self.config.onCancel(editForm, $self);
 		});
 		if (self.config.autoDisableBt) {
-			editElement.keyup(function () {
-				var value = editElement.val() || editElement.text();
-				if (value === '' || value === self.initialVal) {
+            console.log(editElementTagName);
+            var eventType = $.inArray(editElementTagName, ['INPUT', 'TEXTAREA']) > -1 ? 'keyup' : 'change';
+            console.log(eventType);
+			editElement.bind(eventType, function () {
+				var value = editElement.val();
+				if (value === '' || value === self.initialValue) {
 					submitButton.attr('disabled', true);
 				} else {
 					submitButton.attr('disabled', false);
@@ -136,5 +133,5 @@
 		editElement.focus();
 
 		$.isFunction(self.config.onStartEdit) && self.config.onStartEdit(editForm, $self);
-	}
+	};
 })(jQuery);
