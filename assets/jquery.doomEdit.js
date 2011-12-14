@@ -41,6 +41,7 @@
 			submitBtn: '<button type="submit" class="save-btn">Save</button>',
 			cancelBtn: '<button type="button" class="cancel-btn">Cancel</button>',
 			autoDisableBt: true,
+            placeholder: true,
 			extraHtml: '',
 			showOnEvent: 'click',
 			autoTrigger: false,
@@ -57,6 +58,18 @@
 
 		var self = this;
 		var $self = $(this);
+        this.showPlaceholder = function () {
+            if (self.config.placeholder && $self.data('placeholder') && ($self.html() === '')) {
+                $self.text($self.data('placeholder'));
+            }
+        };
+        this.hidePlaceholder = function ($inputEl) {
+            if (self.config.placeholder && ($self.data('placeholder') === $inputEl.val())) {
+                $inputEl.val('');
+            }
+        };
+        
+        this.showPlaceholder();
 
 		if (this.config.showOnEvent) {
 			$self.unbind(this.config.showOnEvent);
@@ -87,13 +100,12 @@
 		var cancelButton = $(self.config.cancelBtn).addClass('button inactive');
 		cancelButton.click(function () {
 			editForm.remove();
-			$self.show();
+			self.showPlaceholder();
+            $self.show();
 			$.isFunction(self.config.onCancel) && self.config.onCancel(editForm, $self);
 		});
 		if (self.config.autoDisableBt) {
-            console.log(editElementTagName);
             var eventType = $.inArray(editElementTagName, ['INPUT', 'TEXTAREA']) > -1 ? 'keyup' : 'change';
-            console.log(eventType);
 			editElement.bind(eventType, function () {
 				var value = editElement.val();
 				if (value === '' || value === self.initialValue) {
@@ -112,18 +124,20 @@
 					url: editForm.attr('action'),
 					type: editForm.attr('method'),
 					data: editForm.serialize(),
-					beforeSend: function(data){
+					beforeSend: function(data) {
 						$.isFunction(self.config.beforeFormSubmit) && self.config.beforeFormSubmit(data, editForm, $self);
 					},
-					success: function(data){
+					success: function(data) {
 						$.isFunction(self.config.afterFormSubmit) && self.config.afterFormSubmit(data, editForm, $self, newVal);
 						editForm.remove();
-						$(self).show();
+						self.showPlaceholder();
+                        $(self).show();
 					}
 				});
 			} else {				
 				$.isFunction(self.config.afterFormSubmit) && self.config.afterFormSubmit(newVal, editForm, $self);
 				editForm.remove();
+                self.showPlaceholder();
 				$(self).show();
 			}
 			return false;
@@ -133,5 +147,7 @@
 		editElement.focus();
 
 		$.isFunction(self.config.onStartEdit) && self.config.onStartEdit(editForm, $self);
+        
+        self.hidePlaceholder(editElement);
 	};
 })(jQuery);

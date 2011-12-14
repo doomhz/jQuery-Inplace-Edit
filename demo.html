@@ -125,6 +125,22 @@
 		
 		<p>Try to edit the text above:</p>
 		<p>I am a <span class="dedit-select">male</span>.</p>
+        
+        <h3>Simple example with a plceholder</h3>
+        
+        <p>Give a 'data-placeholder="some placeholder"' attribute to your editable element to display a placeholder when your element has no text.</p>
+
+    	<pre>
+&lt;script type=&quot;text/javascript&quot;&gt;
+	$(document).ready(function () {
+		$('.dedit-simple').doomEdit({placeholder: true, ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}});
+	});
+&lt;/script&gt;
+		</pre>
+		
+		<h4>Result:</h4>
+		
+		<p>Please <span class="dedit-simple" data-placeholder="click my placeholder"></span> to edit!</p>
 
 		<h3>Remote submit with ajax example</h3>
 
@@ -198,7 +214,7 @@
 				* Set up th edit in place items
 				*/
 				//Simple inline edit
-				$('.dedit-simple').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}});
+				$('.dedit-simple').doomEdit({ajaxSubmit:false, placeholder: true, afterFormSubmit: function (data, form, el) {el.text(data);}});
 				//Inline edit with textarea
 				$('.dedit-textarea').doomEdit({ajaxSubmit:false, editField: '<textarea name="myEditTextarea" rows="10" cols="70"></textarea>', afterFormSubmit: function (data, form, el) {el.text(data);}});
     			//Inline edit with select
