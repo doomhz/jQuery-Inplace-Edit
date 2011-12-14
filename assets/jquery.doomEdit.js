@@ -3,7 +3,7 @@
 *
 * @author Dumitru Glavan
 * @link http://dumitruglavan.com/jquery-doom-inplace-edit-plugin/
-* @version 2.0 (23-NOV-2011)
+* @version 2.0 (14-DEC-2011)
 * @requires jQuery v1.4 or later
 *
 * @example $('.dedit-simple').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}}); - Simple inline edit
@@ -45,6 +45,7 @@
 			extraHtml: '',
 			showOnEvent: 'click',
 			autoTrigger: false,
+            submitOnBlur: false,
 			afterFormSubmit: function (data, form, el) {
 				$('button', form).removeAttr('disabled').fadeTo(0, 1);
 			},
@@ -145,6 +146,12 @@
 
 		$self.hide().after(editForm);
 		editElement.focus();
+        
+        if (self.config.submitOnBlur) {
+            editElement.blur(function () {
+                editForm.submit();
+            });
+        }
 
 		$.isFunction(self.config.onStartEdit) && self.config.onStartEdit(editForm, $self);
         

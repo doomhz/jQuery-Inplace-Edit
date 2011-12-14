@@ -66,6 +66,10 @@
 			<dd>
 				If set to true - shows the edit form immediately. Usually you set the showOnEvent to false and autoTrigger to true to trigger the event immediately without binding it.
 			</dd>
+            <dt><b>submitOnBlur</b>: false</dt>
+    		<dd>
+				If set to true - submits the new data when the edit element looses it's focus.
+			</dd>
 			<dt><b>beforeFormSubmit</b>: function (data, form, el) {$('button', form).attr('disabled', 'disabled').fadeTo(0, 0.2);}</dt>
 			<dd>
 				A callback function that will be triggered before the data is saved.
@@ -130,7 +134,7 @@
 		<p>Try to edit the text above:</p>
 		<p>I am a <span class="dedit-select">male</span>.</p>
         
-        <h3>Simple example with a plceholder</h3>
+        <h3>Simple example with a placeholder</h3>
         
         <p>Give a 'data-placeholder="some placeholder"' attribute to your editable element to display a placeholder when your element has no text.</p>
 
@@ -145,6 +149,23 @@
 		<h4>Result:</h4>
 		
 		<p>Please <span class="dedit-simple" data-placeholder="click my placeholder"></span> to edit!</p>
+        
+        
+        <h3>Simple example with saving data on side click</h3>
+        
+        <p>Set 'submitOnBlur: true' option to true if you want to save the new data on outside click (when the edit element looses it's focus).</p>
+
+        <pre>
+&lt;script type=&quot;text/javascript&quot;&gt;
+	$(document).ready(function () {
+		$('.dedit-simple').doomEdit({submitOnBlur: true, ajaxSubmit:false, submitBtn: false, cancelBtn: false, afterFormSubmit: function (data, form, el) {el.text(data);}});
+	});
+&lt;/script&gt;
+		</pre>
+		
+		<h4>Result:</h4>
+		
+        <p>Please <span class="dedit-simple-blur">edit me</span> and click outside to save the new data!</p>
 
 		<h3>Remote submit with ajax example</h3>
 
@@ -219,6 +240,8 @@
 				*/
 				//Simple inline edit
 				$('.dedit-simple').doomEdit({ajaxSubmit:false, placeholder: true, afterFormSubmit: function (data, form, el) {el.text(data);}});
+        //Simple inline edit with save on outside click
+    			$('.dedit-simple-blur').doomEdit({ajaxSubmit:false, submitOnBlur: true, submitBtn: false, cancelBtn: false, afterFormSubmit: function (data, form, el) {el.text(data);}});
 				//Inline edit with textarea
 				$('.dedit-textarea').doomEdit({ajaxSubmit:false, editField: '<textarea name="myEditTextarea" rows="10" cols="70"></textarea>', afterFormSubmit: function (data, form, el) {el.text(data);}});
     			//Inline edit with select
