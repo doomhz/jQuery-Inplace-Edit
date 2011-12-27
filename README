@@ -27,12 +27,16 @@ cancelBtn: "<button type="button" class="cancel-btn">Cancel</button>"
 autoDisableBt: true
 	The submit button is auto-disabled by default if the content of the edited field is the same as the old one so the user can't submit the form if he didn't change anything.
 	Change this to false so the user can always submit the form.
+extraHtml: ''
+    Add extra HTML element to the form (i.e hidden inputs).
 placeholder: true
     Give a 'data-placeholder="some placeholder"' attribute to your editable element to display a placeholder when your element has no text.
 showOnEvent: "click"
 	Show the edit form on this event. If set to false - don't bind it to any event.
 autoTrigger: false
 	If set to true - shows the edit form immediately. Usually you set the showOnEvent to false and autoTrigger to true to trigger the event immediately without binding it.
+submitOnBlur: false
+    If set to true - submits the new data when the edit element looses it's focus.
 beforeFormSubmit: function (data, form, el) {$('button', form).attr('disabled', 'disabled').fadeTo(0, 0.2);}
     A callback function that will be triggered before the data is saved. 
 afterFormSubmit: function (data, form, el) {$('button', form).removeAttr('disabled').fadeTo(0, 1);}
@@ -71,13 +75,24 @@ Simple example with select box
 </script>
 
 
-Simple example with a plceholder
+Simple example with a placeholder
 
 Give a 'data-placeholder="some placeholder"' attribute to your editable element to display a placeholder when your element has no text.
 
 <script type="text/javascript">
     $(document).ready(function () {
 		$('.dedit-simple').doomEdit({placeholder: true, ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}});
+	});
+</script>
+
+
+Simple example with saving data on side click
+
+Set 'submitOnBlur: true' option to true if you want to save the new data on outside click (when the edit element looses it's focus).
+
+<script type="text/javascript">
+    $(document).ready(function () {
+		$('.dedit-simple').doomEdit({submitOnBlur: true, ajaxSubmit:false, submitBtn: false, cancelBtn: false, afterFormSubmit: function (data, form, el) {el.text(data);}});
 	});
 </script>
 

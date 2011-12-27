@@ -45,6 +45,7 @@
 			extraHtml: '',
 			showOnEvent: 'click',
 			autoTrigger: false,
+            submitOnBlur: false,
 			afterFormSubmit: function (data, form, el) {
 				$('button', form).removeAttr('disabled').fadeTo(0, 1);
 			},
@@ -145,6 +146,12 @@
 
 		$self.hide().after(editForm);
 		editElement.focus();
+        
+        if (self.config.submitOnBlur) {
+            editElement.blur(function () {
+                editForm.submit();
+            });
+        }
 
 		$.isFunction(self.config.onStartEdit) && self.config.onStartEdit(editForm, $self);
         
