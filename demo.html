@@ -37,9 +37,13 @@
 			<dd>
 				Specifyes if the data should be sent remotely.
 			</dd>
-			<dt><b>editField</b>: "&lt;input name="doomEditElement" type="text" /&gt;"</dt>
+			<dt><b>editField</b>: "&lt;input name="{editFieldName}" type="text" /&gt;"</dt>
 			<dd>
 				The hidden edit field that will appear when edit starts. You can specify your own textarea or input field.
+			</dd>
+            <dt><b>editFieldName</b>: "doomEditElement"</dt>
+    		<dd>
+				The field name that will be sent along with the request. First it tries to get it automaticaly from the "data-field-name" attribute of the element then from the config option.
 			</dd>
 			<dt><b>submitBtn</b>: "&lt;button type="submit" class="save-btn"&gt;Save&lt;/button&gt;"</dt>
 			<dd>
@@ -81,6 +85,10 @@
 			<dt><b>afterFormSubmit</b>: function (data, form, el) {$('button', form).removeAttr('disabled').fadeTo(0, 1);}</dt>
 			<dd>
 				A callback function that will be triggered after the data is saved.
+			</dd>
+            <dt><b>onFormError</b>: function (xhr) {console.log(xhr.responseText);}</dt>
+    		<dd>
+				A callback function that will be triggered on save form error.
 			</dd>
 			<dt><b>onCancel</b>: null</dt>
 			<dd>

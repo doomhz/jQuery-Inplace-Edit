@@ -18,8 +18,10 @@ editForm.id: "doomEditForm"
     The id of the form. 
 ajaxSubmit: true
     Specifyes if the data should be sent remotely. 
-editField: "<input name="doomEditElement" type="text" />"
+editField: "<input name="{editFieldName}" type="text" />"
     The hidden edit field that will appear when edit starts. You can specify your own textarea or input field. 
+editFieldName: "doomEditElement"
+    The field name that will be sent along with the request. First it tries to get it automaticaly from the "data-field-name" attribute of the element then from the config option. 
 submitBtn: "<button type="submit" class="save-btn">Save</button>"
     The submit button element that will be clicked to save the data. 
 cancelBtn: "<button type="button" class="cancel-btn">Cancel</button>"
@@ -41,10 +43,12 @@ beforeFormSubmit: function (data, form, el) {$('button', form).attr('disabled', 
     A callback function that will be triggered before the data is saved. 
 afterFormSubmit: function (data, form, el) {$('button', form).removeAttr('disabled').fadeTo(0, 1);}
     A callback function that will be triggered after the data is saved. 
+onFormError: function (xhr) {console.log(xhr.responseText);}
+    A callback function that will be triggered on save form error. 
 onCancel: null
-    A callback function that will be triggered when the cancel button is pressed. 
+    A callback function that will be triggered when the cancel button is pressed.
 onStartEdit: null
-    A callback function that will be triggered when the edit field is activated. 
+    A callback function that will be triggered when the edit field is activated.
 
 
 Implementation
