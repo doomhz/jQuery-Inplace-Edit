@@ -10,18 +10,15 @@
 
 ## Options
 
-* editForm.method: "post"
- - GET or POST request method for remotely sent data. 
-* editForm.action: "/"
- - The remote URL where the data will be sent. 
-* editForm.id: "doomEditForm"
- -- The id of the form. 
-* ajaxSubmit: true
- -- Specifyes if the data should be sent remotely. 
-* editField: "<input name="{editFieldName}" type="text" />"
- -- The hidden edit field that will appear when edit starts. You can specify your own textarea or input field. 
-- editFieldName: "doomEditElement"
- -- The field name that will be sent along with the request. First it tries to get it automaticaly from the "data-field-name" attribute of the element then from the config option. 
+| Name | Default value | Description |
+|------|---------------|-------------|
+| editForm.method | "post" | GET or POST request method for remotely sent data. |
+| editForm.action | "/" | The remote URL where the data will be sent. |
+| editForm.id | "doomEditForm" | The id of the form. |
+| ajaxSubmit | true | Specifyes if the data should be sent remotely. |
+| editField | "<input name="{editFieldName}" type="text" />" | The hidden edit field that will appear when edit starts. You can specify your own textarea or input field. |
+| editFieldName | "doomEditElement" | The field name that will be sent along with the request. First it tries to get it automaticaly from the "data-field-name" attribute of the element then from the config option. |
+
 - submitBtn: "<button type="submit" class="save-btn">Save</button>"
  -- The submit button element that will be clicked to save the data. 
 - cancelBtn: "<button type="button" class="cancel-btn">Cancel</button>"
@@ -58,32 +55,26 @@
 ### Very simple example
 
 ````javascript
-<script type="text/javascript">
-	$(document).ready(function () {
-		$('.dedit-simple').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}});
-	});
-</script>
+$(document).ready(function () {
+	$('.dedit-simple').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}});
+});
 ````
 		
 
 ### Simple example with textarea
 
 ````javascript
-<script type="text/javascript">
-	$(document).ready(function () {
-		$('.dedit-simple').doomEdit({ajaxSubmit:false, editField: '<textarea name="myEditTextarea" rows="10" cols="70"></textarea>', afterFormSubmit: function (data, form, el) {el.text(data);}});
-	});
-</script>
+$(document).ready(function () {
+	$('.dedit-simple').doomEdit({ajaxSubmit:false, editField: '<textarea name="myEditTextarea" rows="10" cols="70"></textarea>', afterFormSubmit: function (data, form, el) {el.text(data);}});
+});
 ````
 
 ### Simple example with select box
 
 ````javascript
-<script type="text/javascript">
-    $(document).ready(function () {
-		$('.dedit-simple').doomEdit({ajaxSubmit:false, editField: '<select name="myEditSelect"><option value="male">male</option><option value="female">female</option></select>', afterFormSubmit: function (data, form, el) {el.text(data);}});
-	});
-</script>
+$(document).ready(function () {
+	$('.dedit-simple').doomEdit({ajaxSubmit:false, editField: '<select name="myEditSelect"><option value="male">male</option><option value="female">female</option></select>', afterFormSubmit: function (data, form, el) {el.text(data);}});
+});
 ````
 
 ### Simple example with a placeholder
@@ -91,11 +82,9 @@
 Give a 'data-placeholder="some placeholder"' attribute to your editable element to display a placeholder when your element has no text.
 
 ````javascript
-<script type="text/javascript">
-    $(document).ready(function () {
-		$('.dedit-simple').doomEdit({placeholder: true, ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}});
-	});
-</script>
+$(document).ready(function () {
+	$('.dedit-simple').doomEdit({placeholder: true, ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}});
+});
 ````
 
 ### Simple example with saving data on side click
@@ -103,40 +92,32 @@ Give a 'data-placeholder="some placeholder"' attribute to your editable element 
 Set 'submitOnBlur: true' option to true if you want to save the new data on outside click (when the edit element looses it's focus).
 
 ````javascript
-<script type="text/javascript">
-    $(document).ready(function () {
-		$('.dedit-simple').doomEdit({submitOnBlur: true, ajaxSubmit:false, submitBtn: false, cancelBtn: false, afterFormSubmit: function (data, form, el) {el.text(data);}});
-	});
-</script>
+$(document).ready(function () {
+	$('.dedit-simple').doomEdit({submitOnBlur: true, ajaxSubmit:false, submitBtn: false, cancelBtn: false, afterFormSubmit: function (data, form, el) {el.text(data);}});
+});
 ````
 
 ### Remote submit with ajax example
 
 ````javascript
-<script type="text/javascript">
-	$(document).ready(function () {
-		$('.dedit-remote').doomEdit({editForm:{method:'post', action:'remote.html', id:'myeditformid'}, afterFormSubmit: function (data, form, el) {el.text($('input', form).val());alert(data);}});
-	});
-</script>
+$(document).ready(function () {
+	$('.dedit-remote').doomEdit({editForm:{method:'post', action:'remote.html', id:'myeditformid'}, afterFormSubmit: function (data, form, el) {el.text($('input', form).val());alert(data);}});
+});
 ````
 
 ### Remote submit with ajax example and JSON response
 
 ````javascript
-<script type="text/javascript">
-	$(document).ready(function () {
-		$('.dedit-remote-json').doomEdit({editForm:{method:'post', action:'remote_json.html', id:'myeditformid'}, afterFormSubmit: function (data, form, el) {data = $.parseJSON(data);el.text(data.message);alert(data.message);}});
-	});
-</script>
+$(document).ready(function () {
+	$('.dedit-remote-json').doomEdit({editForm:{method:'post', action:'remote_json.html', id:'myeditformid'}, afterFormSubmit: function (data, form, el) {data = $.parseJSON(data);el.text(data.message);alert(data.message);}});
+});
 ````
 
 ### Multiple cells table edit example
 
 ````javascript
-<script type="text/javascript">
-	$(document).ready(function () {
-		//Edit multiple cells inline
-		$('.edit-cell-inline').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}});
-	});
-</script>
+$(document).ready(function () {
+	//Edit multiple cells inline
+	$('.edit-cell-inline').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}});
+});
 ````
