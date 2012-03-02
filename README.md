@@ -10,28 +10,28 @@
 
 ## Options
 
-| Name | Default value | Description |
+| **Name** | **Default value** | **Description** |
 |------|---------------|-------------|
-| editForm.method | "post" | GET or POST request method for remotely sent data. |
-| editForm.action | "/" | The remote URL where the data will be sent. |
-| editForm.id | "doomEditForm" | The id of the form. |
-| ajaxSubmit | true | Specifyes if the data should be sent remotely. |
-| editField | "<input name="{editFieldName}" type="text" />" | The hidden edit field that will appear when edit starts. You can specify your own textarea or input field. |
-| editFieldName | "doomEditElement" | The field name that will be sent along with the request. First it tries to get it automaticaly from the "data-field-name" attribute of the element then from the config option. |
-| submitBtn | "<button type="submit" class="save-btn">Save</button>" | The submit button element that will be clicked to save the data. |
-| cancelBtn | "<button type="button" class="cancel-btn">Cancel</button>" | The cancel button element that will be clicked to cancel the data. |
-| autoDisableBt | true | The submit button is auto-disabled by default if the content of the edited field is the same as the old one so the user can't submit the form if he didn't change anything. Change this to false so the user can always submit the form. |
-| extraHtml | '' | Add extra HTML element to the form (i.e hidden inputs). |
-| htmlFilter | false | A filter callback that will be fired when the original HTML shows up for editing. |
-| placeholder | true | Give a 'data-placeholder="some placeholder"' attribute to your editable element to display a placeholder when your element has no text. |
-| showOnEvent | "click" | Show the edit form on this event. If set to false - don't bind it to any event. |
-| autoTrigger | false | If set to true - shows the edit form immediately. Usually you set the showOnEvent to false and autoTrigger to true to trigger the event immediately without binding it. |
-| submitOnBlur | false | If set to true - submits the new data when the edit element looses it's focus. |
-| beforeFormSubmit | function (data, form, el) {$('button', form).attr('disabled', 'disabled').fadeTo(0, 0.2);} | A callback function that will be triggered before the data is saved. |
-| afterFormSubmit | function (data, form, el) {$('button', form).removeAttr('disabled').fadeTo(0, 1);} | A callback function that will be triggered after the data is saved. |
-| onFormError | function (xhr) {console.log(xhr.responseText);} | A callback function that will be triggered on save form error. |
-| onCancel | null | A callback function that will be triggered when the cancel button is pressed. |
-| onStartEdit | null | A callback function that will be triggered when the edit field is activated. |
+| **editForm.method** | "post" | GET or POST request method for remotely sent data. |
+| **editForm.action** | "/" | The remote URL where the data will be sent. |
+| **editForm.id** | "doomEditForm" | The id of the form. |
+| **ajaxSubmit** | true | Specifyes if the data should be sent remotely. |
+| **editField** | "<input name="{editFieldName}" type="text" />" | The hidden edit field that will appear when edit starts. You can specify your own textarea or input field. |
+| **editFieldName** | "doomEditElement" | The field name that will be sent along with the request. First it tries to get it automaticaly from the "data-field-name" attribute of the element then from the config option. |
+| **submitBtn** | "<button type="submit" class="save-btn">Save</button>" | The submit button element that will be clicked to save the data. |
+| **cancelBtn** | "<button type="button" class="cancel-btn">Cancel</button>" | The cancel button element that will be clicked to cancel the data. |
+| **autoDisableBt** | true | The submit button is auto-disabled by default if the content of the edited field is the same as the old one so the user can't submit the form if he didn't change anything. Change this to false so the user can always submit the form. |
+| **extraHtml** | '' | Add extra HTML element to the form (i.e hidden inputs). |
+| **htmlFilter** | false | A filter callback that will be fired when the original HTML shows up for editing. |
+| **placeholder** | true | Give a 'data-placeholder="some placeholder"' attribute to your editable element to display a placeholder when your element has no text. |
+| **showOnEvent** | "click" | Show the edit form on this event. If set to false - don't bind it to any event. |
+| **autoTrigger** | false | If set to true - shows the edit form immediately. Usually you set the showOnEvent to false and autoTrigger to true to trigger the event immediately without binding it. |
+| **submitOnBlur** | false | If set to true - submits the new data when the edit element looses it's focus. |
+| **beforeFormSubmit** | function (data, form, el) {$('button', form).attr('disabled', 'disabled').fadeTo(0, 0.2);} | A callback function that will be triggered before the data is saved. |
+| **afterFormSubmit** | function (data, form, el) {$('button', form).removeAttr('disabled').fadeTo(0, 1);} | A callback function that will be triggered after the data is saved. |
+| **onFormError** | function (xhr) {console.log(xhr.responseText);} | A callback function that will be triggered on save form error. |
+| **onCancel** | null | A callback function that will be triggered when the cancel button is pressed. |
+| **onStartEdit** | null | A callback function that will be triggered when the edit field is activated. |
 
 
 ## Implementation
