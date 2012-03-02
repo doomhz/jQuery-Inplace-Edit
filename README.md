@@ -10,9 +10,9 @@
 
 ## Options
 
-** editForm.method: "post" **
+* editForm.method: "post"
  - GET or POST request method for remotely sent data. 
-** editForm.action: "/" **
+* editForm.action: "/"
  - The remote URL where the data will be sent. 
 * editForm.id: "doomEditForm"
  -- The id of the form. 
