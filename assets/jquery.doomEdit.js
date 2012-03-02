@@ -3,7 +3,7 @@
 *
 * @author Dumitru Glavan
 * @link http://dumitruglavan.com/jquery-doom-inplace-edit-plugin/
-* @version 2.1 (3-FEB-2012)
+* @version 2.2 (2-MAR-2012)
 * @requires jQuery v1.4 or later
 *
 * @example $('.dedit-simple').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}}); - Simple inline edit
@@ -44,6 +44,7 @@
       autoDisableBt: true,
       placeholder: true,
       extraHtml: '',
+      htmlFilter: false,
       showOnEvent: 'click',
       autoTrigger: false,
       submitOnBlur: false,
@@ -93,7 +94,7 @@
     var self = this;
     var $self = $(this);
 
-    self.initialValue = $self.text();
+    self.initialValue = $.isFunction(self.config.htmlFilter) ? self.config.htmlFilter($self.html()) : $self.text();
     var editForm = $('<form>' + self.config.extraHtml + '</form>').attr(self.config.editForm);
     var editFieldName = $self.data("field-name") || self.config.editFieldName;
     var editElement = $(self.config.editField.replace(/\{editFieldName\}/g, editFieldName)).addClass('text');
@@ -107,7 +108,7 @@
     cancelButton.click(function () {
       editForm.remove();
       self.showPlaceholder();
-            $self.show();
+      $self.show();
       $.isFunction(self.config.onCancel) && self.config.onCancel(editForm, $self);
     });
     if (self.config.autoDisableBt) {
@@ -130,8 +131,8 @@
           url: editForm.attr('action'),
           type: editForm.attr('method'),
           data: editForm.serialize(),
-          beforeSend: function(data) {
-            $.isFunction(self.config.beforeFormSubmit) && self.config.beforeFormSubmit(data, editForm, $self);
+          beforeSend: function(xhr, settings) {
+            return $.isFunction(self.config.beforeFormSubmit) && self.config.beforeFormSubmit(xhr, editForm, $self, settings);
           },
           success: function(data) {
             $.isFunction(self.config.afterFormSubmit) && self.config.afterFormSubmit(data, editForm, $self, newVal);
