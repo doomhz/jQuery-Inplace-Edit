@@ -3,8 +3,8 @@
 *
 * @author Dumitru Glavan
 * @link http://dumitruglavan.com/jquery-doom-inplace-edit-plugin/
-* @version 1.4 (16-JUL-2011)
-* @requires jQuery v1.3.2 or later
+* @version 2.2 (2-MAR-2012)
+* @requires jQuery v1.4 or later
 *
 * @example $('.dedit-simple').doomEdit({ajaxSubmit:false, afterFormSubmit: function (data, form, el) {el.text(data);}}); - Simple inline edit
 * @example $('.dedit-textarea').doomEdit({ajaxSubmit:false, editField: '<textarea name="myEditTextarea" rows="10" cols="70"></textarea>', afterFormSubmit: function (data, form, el) {el.text(data);}}); - Inline edit with textarea
@@ -21,120 +21,150 @@
 *
 */
 (function ($) {
-	$.fn.doomEdit = function (options) {
+  $.fn.doomEdit = function (options) {
 
-		if ($(this).length > 1) {
-			$(this).each(function (i, el) {
-				$(el).doomEdit(options);
-			});
-			return $(this);
-		}
+    if ($(this).length > 1) {
+      $(this).each(function (i, el) {
+        $(el).doomEdit(options);
+      });
+      return $(this);
+    }
 
-		this.config = {
-			editForm: {
-				method:'post',
-				action:'/',
-				id:'doomEditForm'
-			},
-			ajaxSubmit: true,
-			editField: '<input name="doomEditElement" type="text" />',
-			submitBtn: '<button type="submit" class="save-btn">Save</button>',
-			cancelBtn: '<button type="button" class="cancel-btn">Cancel</button>',
-			autoDisableBt: true,
-			extraHtml: '',
-			showOnEvent: 'click',
-			autoTrigger: false,
-			afterFormSubmit: function (data, form, el) {
-				$('button', form).removeAttr('disabled').fadeTo(0, 1);
-			},
-			beforeFormSubmit: function (data, form, el) {
-				$('button', form).attr('disabled', true).fadeTo(0, 0.2);
-			},
-			onCancel: null,
-			onStartEdit: null
-		};
-		$.extend(this.config, options);
+    this.config = {
+      editForm: {
+        method:'post',
+        action:'/',
+        id:'doomEditForm'
+      },
+      ajaxSubmit: true,
+      editField: '<input name="{editFieldName}" type="text" />',
+      editFieldName: 'doomEditElement',
+      submitBtn: '<button type="submit" class="save-btn">Save</button>',
+      cancelBtn: '<button type="button" class="cancel-btn">Cancel</button>',
+      autoDisableBt: true,
+      placeholder: true,
+      extraHtml: '',
+      htmlFilter: false,
+      showOnEvent: 'click',
+      autoTrigger: false,
+      submitOnBlur: false,
+      afterFormSubmit: function (data, form, el) {
+        $('button', form).removeAttr('disabled').fadeTo(0, 1);
+      },
+      beforeFormSubmit: function (data, form, el) {
+        $('button', form).attr('disabled', true).fadeTo(0, 0.2);
+      },
+      onFormError: function (xhr) {
+        console.log(xhr.responseText);
+      },
+      onCancel: null,
+      onStartEdit: null
+    };
+    $.extend(this.config, options);
 
-		var self = this;
-		var $self = $(this);
+    var self = this;
+    var $self = $(this);
+    this.showPlaceholder = function () {
+        if (self.config.placeholder && $self.data('placeholder') && ($self.html() === '')) {
+            $self.text($self.data('placeholder'));
+        }
+    };
+    this.hidePlaceholder = function ($inputEl) {
+        if (self.config.placeholder && ($self.data('placeholder') === $inputEl.val())) {
+            $inputEl.val('');
+        }
+    };
 
-		if (this.config.showOnEvent) {
-			$self.unbind(this.config.showOnEvent);
-			$self.bind(this.config.showOnEvent, function () {
-				$self.showEditForm.call(self);
-			});
-		}
-		if (this.config.autoTrigger) {
-			$self.showEditForm.call(self);
-		}
+    this.showPlaceholder();
 
-		return this;
-	},
+    if (this.config.showOnEvent) {
+      $self.unbind(this.config.showOnEvent);
+      $self.bind(this.config.showOnEvent, function () {
+        $self.showEditForm.call(self);
+      });
+    }
+    if (this.config.autoTrigger) {
+      $self.showEditForm.call(self);
+    }
 
-	$.fn.showEditForm = function () {
-		var self = this;
-		var $self = $(this);
+    return this;
+  };
 
-		self.initialValue = $self.text();
-		var editForm = $('<form>' + self.config.extraHtml + '</form>').attr(self.config.editForm);
-		var editElement = $(self.config.editField).addClass('text');
+  $.fn.showEditForm = function () {
+    var self = this;
+    var $self = $(this);
 
-		switch (editElement.get(0).tagName) {
-			case 'INPUT':
-				editElement.val(self.initialValue);
-				break;
-			default:
-				editElement.text(self.initialValue);
-				break;
-		}
+    self.initialValue = $.isFunction(self.config.htmlFilter) ? self.config.htmlFilter($self.html()) : $self.text();
+    var editForm = $('<form>' + self.config.extraHtml + '</form>').attr(self.config.editForm);
+    var editFieldName = $self.data("field-name") || self.config.editFieldName;
+    var editElement = $(self.config.editField.replace(/\{editFieldName\}/g, editFieldName)).addClass('text');
+    var editElementTagName = editElement.get(0).tagName;
 
-		editForm.append(editElement);
-		var submitButton = $(self.config.submitBtn).attr({disabled:self.config.autoDisableBt}).addClass('button');
-		var cancelButton = $(self.config.cancelBtn).addClass('button inactive');
-		cancelButton.click(function () {
-			editForm.remove();
-			$self.show();
-			$.isFunction(self.config.onCancel) && self.config.onCancel(editForm, $self);
-		});
-		if (self.config.autoDisableBt) {
-			editElement.keyup(function () {
-				var value = editElement.val() || editElement.text();
-				if (value === '' || value === self.initialVal) {
-					submitButton.attr('disabled', true);
-				} else {
-					submitButton.attr('disabled', false);
-				}
-			});
-		}
-		editForm.append(submitButton);
-		editForm.append(cancelButton);
-		editForm.submit(function () {
-			var newVal = editElement.val() || editElement.text();
-			if (self.config.ajaxSubmit) {
-				$.ajax({
-					url: editForm.attr('action'),
-					type: editForm.attr('method'),
-					data: editForm.serialize(),
-					beforeSend: function(data){
-						$.isFunction(self.config.beforeFormSubmit) && self.config.beforeFormSubmit(data, editForm, $self);
-					},
-					success: function(data){
-						$.isFunction(self.config.afterFormSubmit) && self.config.afterFormSubmit(data, editForm, $self, newVal);
-						editForm.remove();
-						$(self).show();
-					}
-				});
-			} else {				
-				$.isFunction(self.config.afterFormSubmit) && self.config.afterFormSubmit(newVal, editForm, $self);
-				editForm.remove();
-				$(self).show();
-			}
-			return false;
-		});
+    editElement.val(self.initialValue);
 
-		$self.hide().after(editForm);
-		editElement.focus();
+    editForm.append(editElement);
+    var submitButton = $(self.config.submitBtn).attr({disabled:self.config.autoDisableBt}).addClass('button');
+    var cancelButton = $(self.config.cancelBtn).addClass('button inactive');
+    cancelButton.click(function () {
+      editForm.remove();
+      self.showPlaceholder();
+      $self.show();
+      $.isFunction(self.config.onCancel) && self.config.onCancel(editForm, $self);
+    });
+    if (self.config.autoDisableBt) {
+      var eventType = $.inArray(editElementTagName, ['INPUT', 'TEXTAREA']) > -1 ? 'keyup' : 'change';
+      editElement.bind(eventType, function () {
+        var value = editElement.val();
+        if (value === '' || value === self.initialValue) {
+          submitButton.attr('disabled', true);
+        } else {
+          submitButton.attr('disabled', false);
+        }
+      });
+    }
+    editForm.append(submitButton);
+    editForm.append(cancelButton);
+    editForm.submit(function () {
+      var newVal = editElement.val() || editElement.text();
+      if (self.config.ajaxSubmit) {
+        $.ajax({
+          url: editForm.attr('action'),
+          type: editForm.attr('method'),
+          data: editForm.serialize(),
+          beforeSend: function(xhr, settings) {
+            return $.isFunction(self.config.beforeFormSubmit) && self.config.beforeFormSubmit(xhr, editForm, $self, settings);
+          },
+          success: function(data) {
+            $.isFunction(self.config.afterFormSubmit) && self.config.afterFormSubmit(data, editForm, $self, newVal);
+            editForm.remove();
+            self.showPlaceholder();
+            $(self).show();
+          },
+          error: function (xhr) {
+            $.isFunction(self.config.onFormError) && self.config.onFormError(xhr);
+          }
+        });
+      } else {
+        $.isFunction(self.config.afterFormSubmit) && self.config.afterFormSubmit(newVal, editForm, $self);
+        editForm.remove();
+        self.showPlaceholder();
+        $(self).show();
+      }
+      return false;
+    });
 
-		$.isFunction(self.config.onStartEdit) && self.config.onStartEdit(editForm, $self);
-	}
+    $self.hide().after(editForm);
+    editElement.focus();
+
+    if (self.config.submitOnBlur) {
+      editElement.blur(function () {
+        if (document.activeElement != editElement[0])
+          editForm.submit();
+      });
+    }
+
+    $.isFunction(self.config.onStartEdit) && self.config.onStartEdit(editForm, $self);
+
+    self.hidePlaceholder(editElement);
+  };
 })(jQuery);
